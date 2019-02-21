@@ -722,6 +722,7 @@ zloop_start (zloop_t *self)
                 break;
         }
         rc = zmq_poll (self->pollset, (int) self->poll_size, s_tickless (self));
+        if (rc == -1 && errno == EINTR && !zsys_interrupted) continue;
         if (rc == -1 || (zsys_interrupted && !self->nonstop)) {
             if (self->verbose) {
                 if (rc == -1)
